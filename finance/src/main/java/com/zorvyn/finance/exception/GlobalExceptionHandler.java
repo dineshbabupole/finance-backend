@@ -65,6 +65,7 @@ public class GlobalExceptionHandler {
     // Any unexpected error lands here
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorResponse> handleGeneral(Exception ex) {
+
         return build(HttpStatus.INTERNAL_SERVER_ERROR, "Internal Server Error",
                 "Something went wrong. Please try again.");
     }

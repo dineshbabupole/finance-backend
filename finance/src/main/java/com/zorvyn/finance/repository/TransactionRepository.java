@@ -17,18 +17,20 @@ public interface TransactionRepository extends JpaRepository<Transaction, Long> 
 
     List<Transaction> findByDateBetweenAndDeletedFalse(LocalDate start, LocalDate end);
 
-    @Query("SELECT COALESCE(SUM(t.amount), 0) FROM Transaction t WHERE t.type = 'INCOME' AND t.deleted = false")
+    @Query(value = "SELECT COALESCE(SUM(t.amount), 0) FROM transactions t WHERE t.type = 'INCOME' AND t.deleted = 0",
+            nativeQuery = true)
     BigDecimal sumIncome();
 
-    @Query("SELECT COALESCE(SUM(t.amount), 0) FROM Transaction t WHERE t.type = 'EXPENSE' AND t.deleted = false")
+    @Query(value = "SELECT COALESCE(SUM(t.amount), 0) FROM transactions t WHERE t.type = 'EXPENSE' AND t.deleted = 0",
+            nativeQuery = true)
     BigDecimal sumExpenses();
-
-    @Query("SELECT t.category, SUM(t.amount) FROM Transaction t WHERE t.deleted = false GROUP BY t.category")
+    @Query(value = "SELECT t.category, SUM(t.amount) FROM transactions t WHERE t.deleted = 0 GROUP BY t.category",
+            nativeQuery = true)
     List<Object[]> sumByCategory();
-
-    @Query(value = "SELECT strftime('%Y-%m', date) as month, type, SUM(amount) " +
-            "FROM transactions WHERE deleted = 0 " +
-            "GROUP BY month, type ORDER BY month DESC LIMIT 12",
+    @Query(value = "SELECT t.date as month, t.type, SUM(t.amount) " +
+            "FROM transactions t WHERE t.deleted = 0 " +
+            "GROUP BY month, t.type ORDER BY month DESC LIMIT 12",
             nativeQuery = true)
     List<Object[]> monthlyTrends();
+
 }

@@ -28,12 +28,19 @@ public class DashboardService {
     // ─── CATEGORY WISE TOTALS ─────────────────────────────
     // For ANALYST, ADMIN
     public Map<String, BigDecimal> getCategoryTotals() {
+
         List<Object[]> rows = transactionRepository.sumByCategory();
 
         Map<String, BigDecimal> result = new LinkedHashMap<>();
+
         for (Object[] row : rows) {
-            String category     = (String) row[0];
-            BigDecimal total    = (BigDecimal) row[1];
+            // Skip null categories
+            if (row[0] == null || row[1] == null) {
+                continue;
+            }
+
+            String category    = row[0].toString();
+            BigDecimal total   = new BigDecimal(row[1].toString());
             result.put(category, total);
         }
 
@@ -43,15 +50,20 @@ public class DashboardService {
     // ─── MONTHLY TRENDS ───────────────────────────────────
     // For ANALYST, ADMIN
     public Map<String, Map<String, BigDecimal>> getMonthlyTrends() {
+
         List<Object[]> rows = transactionRepository.monthlyTrends();
 
-        // Structure: { "2026-03": { "INCOME": 50000, "EXPENSE": 10000 } }
         Map<String, Map<String, BigDecimal>> result = new LinkedHashMap<>();
 
         for (Object[] row : rows) {
-            String month        = (String) row[0];
-            String type         = (String) row[1];
-            BigDecimal amount   = new BigDecimal(row[2].toString());
+            // Skip rows where month or type is null
+            if (row[0] == null || row[1] == null || row[2] == null) {
+                continue;
+            }
+
+            String month      = row[0].toString();
+            String type       = row[1].toString();
+            BigDecimal amount = new BigDecimal(row[2].toString());
 
             result
                     .computeIfAbsent(month, k -> new LinkedHashMap<>())
