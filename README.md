@@ -1,6 +1,3 @@
-Here is the complete README in one single block — just copy and paste the whole thing into your README.md file:
-markdown# Finance Backend
-
 This is a backend application I built for managing financial records.
 Different users have different roles and each role has different level of access.
 For example an admin can add transactions but a viewer can only see the summary.
