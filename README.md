@@ -13,7 +13,7 @@ JWT is used for authentication so every request carries the token and the role i
 
 - Java 17
 - Spring Boot 3.5
-- PostgreSQL (deployed) / SQLite (local)
+- PostgreSQL (deployed) / SQLite (test)
 - JWT for authentication
 - Maven for build
 - Swagger UI for API documentation
